@@ -1,9 +1,10 @@
 <?php
 
-namespace Frame;
+namespace Frame\Interfaces;
+
 interface Decorator
 {
     public function beforeRequest($controller);
 
-    public function afterRequest($return_value);
+    public function afterRequest($value);
 }

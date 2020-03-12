@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Decorator;
+use Frame\Interfaces\Decorator;
 
-class Template implements \Frame\Decorator
+class Template implements Decorator
 {
     protected $controller;
 
@@ -11,10 +12,10 @@ class Template implements \Frame\Decorator
         $this->controller = $controller;
     }
 
-    function afterRequest($return_value)
+    function afterRequest($value)
     {
         if (isset($_GET['app']) && $_GET['app'] == 'html') {
-            foreach ($return_value as $k => $v) {
+            foreach ($value as $k => $v) {
                 $this->controller->assign($k, $v);
             }
             $this->controller->display();
