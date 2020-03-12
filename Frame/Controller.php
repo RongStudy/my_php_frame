@@ -18,7 +18,7 @@ abstract class Controller
     {
         $this->controller_name = $controller_name;
         $this->action_name = $action_name;
-        $this->template_dir = Application::getInstance()->base_dir . '/View';
+        $this->template_dir = Application::getInstance()->base_dir . '/App/View';
     }
 
     public function assign($key, $value)
