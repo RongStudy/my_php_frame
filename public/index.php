@@ -1,7 +1,7 @@
 <?php
 
-define('BASEDIR', __DIR__);
+define('BASEDIR', dirname(__DIR__));
 require BASEDIR . '/Frame/Loader.php';
 spl_autoload_register('\\Frame\\Loader::autoload');
 
-echo \frame\Application::getInstance(BASEDIR)->dispatch();
+\frame\Application::getInstance(BASEDIR)->dispatch();
