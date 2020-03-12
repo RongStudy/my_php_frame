@@ -6,6 +6,8 @@ namespace Frame;
 
 class Loader
 {
+    private function __construct(){}
+
     public static function autoload($class)
     {
         $file_path = str_replace('\\', '/', BASEDIR . '/' . str_replace('\\', '/', $class) . '.php');
