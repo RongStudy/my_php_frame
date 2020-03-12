@@ -35,29 +35,29 @@ class Application
         $uri = trim($_SERVER['REQUEST_URI'], '/');
         $uri_arr = explode('/', $uri);
         if ($uri == '' || $uri[0] == '?' || $uri == '/' || count($uri_arr) == 1) {
-            $c = ucwords(trim($this->config['config']['default_controller']));
+            $controller = ucwords(trim($this->config['config']['default_controller']));
             $default_action = $this->config['config']['default_action'];
-            $v = strtolower($default_action[0]) . substr($default_action, 1, strlen($default_action));
+            $action = strtolower($default_action[0]) . substr($default_action, 1, strlen($default_action));
         } else {
-            $c = $uri_arr[0];
+            $controller = $uri_arr[0];
             if (strpos($uri_arr[1], '?')!==false) {
-                $v = substr($uri_arr[1], 0, strpos($uri_arr[1], '?'));
+                $action = substr($uri_arr[1], 0, strpos($uri_arr[1], '?'));
             } else {
-                $v = $uri_arr[1];
+                $action = $uri_arr[1];
             }
         }
 
-        $c_low = strtolower($c);
-        $c = ucwords($c);
-        $class = '\\App\\Controller\\'.$c;
-        if (!method_exists($class, $v)) {
-            exit($class . ' -> function ' . $v . ' is not exists');
+        $controller_low = strtolower($controller);
+        $controller = ucwords($controller);
+        $class = '\\App\\Controller\\'.$controller;
+        if (!method_exists($class, $action)) {
+            exit($class . '::' . $action . ' is not exists');
         }
-        $obj = new $class($c, $v);
+        $obj = new $class($controller, $action);
         $controller_config = $this->config['controller'];
         $decorators = array(); # 装饰器
-        if (isset($controller_config[$c_low]['decorator'])) {
-            $conf_decorator = $controller_config[$c_low]['decorator'];
+        if (isset($controller_config[$controller_low]['decorator'])) {
+            $conf_decorator = $controller_config[$controller_low]['decorator'];
             foreach ($conf_decorator as $class) {
                 $decorators[] = new $class;
             }
@@ -65,8 +65,7 @@ class Application
         foreach ($decorators as $decorator) {
             $decorator->beforeRequest($obj);
         }
-
-        $return_value = $obj->$v();
+        $return_value = $obj->$action();
         if ($return_value) {
             foreach ($decorators as $decorator) {
                 $decorator->afterRequest($return_value);
