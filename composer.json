@@ -1,0 +1,13 @@
+{
+    "require": {
+        "twig/twig": "^2.0",
+        "filp/whoops": "^2.7"
+    },
+    "autoload": {
+        "files":[],
+        "psr-4":{
+            "Frame\\" :"Frame",
+            "App\\" :"App"
+        }
+    }
+}
