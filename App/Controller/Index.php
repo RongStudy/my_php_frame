@@ -25,6 +25,6 @@ class Index extends Controller
     {
         $html = '<h1 style="text-align: center;">Hello My_Frame</h1>';
         $this->assign('data', $html);
-        $this->display('ss');
+        $this->display();
     }
 }
