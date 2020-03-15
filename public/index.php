@@ -1,7 +1,11 @@
 <?php
 
 define('BASEDIR', dirname(__DIR__));
-require BASEDIR . '/Frame/Loader.php';
-spl_autoload_register('\\Frame\\Loader::autoload');
+define('IS_TEST', true);
 
-\frame\Application::getInstance(BASEDIR)->dispatch();
+/*
+ * require BASEDIR . '/Frame/Loader.php';
+ * spl_autoload_register('\\Frame\\Loader::autoload');
+ */
+require_once BASEDIR . '/vendor/autoload.php';
+\Frame\Application::getInstance(BASEDIR)->dispatch();
