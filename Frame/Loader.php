@@ -4,7 +4,7 @@
 namespace Frame;
 
 
-class Loader
+abstract class Loader
 {
     private function __construct(){}
 

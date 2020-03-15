@@ -29,6 +29,9 @@ class Config implements \ArrayAccess
     {
         if (empty($this->configs[$key])) {
             $file_path = $this->path . '/' . $key . '.php';
+            if (!file_exists($file_path)) {
+                return array();
+            }
             $config = require_once $file_path;
             $this->configs[$key] = $config;
         }
@@ -40,7 +43,7 @@ class Config implements \ArrayAccess
      */
     public function offsetSet($key, $value)
     {
-        throw new \Exception("Can\'t write config file.");
+        throw_except("Can\'t write config file.");
     }
 
     /**
