@@ -35,9 +35,11 @@ class Application
 
     private function loger()
     {
-        $whoops = new \Whoops\Run;
-        $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
-        $whoops->register();
+        if (IS_TEST) {
+            $whoops = new \Whoops\Run;
+            $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
+            $whoops->register();
+        }
     }
 
     /**
@@ -61,8 +63,12 @@ class Application
         $this->displtch = false;
         $uri = trim($_SERVER['REQUEST_URI'], '/');
         $uri_arr = explode('/', $uri);
-        if ($uri == '' || $uri[0] == '?' || $uri == '/' || count($uri_arr) == 1) {
+        if ($uri === '' || $uri[0] === '?' || $uri === '/') {
             $controller = ucwords(trim(self::$config['config']['default_controller']));
+            $default_action = self::$config['config']['default_action'];
+            $action = strtolower($default_action[0]) . substr($default_action, 1, strlen($default_action));
+        } elseif (count($uri_arr) == 1) {
+            $controller = ucwords($uri_arr[0]);
             $default_action = self::$config['config']['default_action'];
             $action = strtolower($default_action[0]) . substr($default_action, 1, strlen($default_action));
         } else {
@@ -78,7 +84,7 @@ class Application
         $controller = ucwords($controller);
         $class = '\\App\\Controller\\' . $controller;
         if (!method_exists($class, $action)) {
-            exit($class . '::' . $action . ' is not exists');
+            throw_except($class . '::' . $action . ' is not exists');
         }
         $obj = new $class($controller, $action);
         $controller_config = self::$config['controller'];
