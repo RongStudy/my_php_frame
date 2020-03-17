@@ -24,8 +24,8 @@ abstract class Controller
     public function assign($key = '', $value = null)
     {
         if (is_array($value)) {
-            foreach ($value as $key => $val) {
-                $this->assign_data[$key] = $val;
+            foreach ($value as $keys => $val) {
+                $this->assign_data[$key][$keys] = $val;
             }
         } else {
             $this->assign_data[$key] = $value;
