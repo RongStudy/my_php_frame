@@ -1,7 +1,7 @@
 <?php
 
 define('BASEDIR', dirname(__DIR__));
-define('IS_TEST', true);
+define('IS_TEST', false);
 
 /*
  * require BASEDIR . '/Frame/Loader.php';

@@ -7,7 +7,7 @@ namespace Frame;
 class Application
 {
     public $base_dir;
-    private $displtch = true;
+    private $dispatch = true;
 
     private static $config;
     private static $instance;
@@ -57,10 +57,10 @@ class Application
 
     public function dispatch()
     {
-        if (!$this->displtch) {
+        if (!$this->dispatch) {
             exit('can\'t');
         }
-        $this->displtch = false;
+        $this->dispatch = false;
         $uri = trim($_SERVER['REQUEST_URI'], '/');
         $uri_arr = explode('/', $uri);
         if ($uri === '' || $uri[0] === '?' || $uri === '/') {

@@ -18,7 +18,7 @@ class Template implements Decorator
             foreach ($value as $k => $v) {
                 $this->controller->assign($k, $v);
             }
-            $this->controller->display();
+            $this->controller->render();
         }
     }
 }
