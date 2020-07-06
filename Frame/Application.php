@@ -18,22 +18,38 @@ class Application
         self::$config = new Config($base_dir . '/configs');
         $this->classAlias();
         $this->loader();
-        $this->loger();
+        $this->logWhoops();
     }
 
-    private function __clone(){}
+    private function __clone()
+    {
+    }
 
+    /**
+     * 命名空间别名
+     * @date 2020/7/6 14:25
+     * @author ronghongyuan
+     */
     private function classAlias()
     {
         class_alias('Frame\\Application', 'Frame\\App');
     }
 
+    /**
+     * 加载器
+     * @date 2020/7/6 14:25
+     * @author ronghongyuan
+     */
     private function loader()
     {
         is_file($this->base_dir . '/App/common.php') ? include_once $this->base_dir . '/App/common.php' : '';
     }
 
-    private function loger()
+    /**
+     * @date 2020/7/6 14:25
+     * @author ronghongyuan
+     */
+    private function logWhoops()
     {
         if (IS_TEST) {
             $whoops = new \Whoops\Run;
@@ -43,9 +59,10 @@ class Application
     }
 
     /**
-     * 单例模式
      * @param string $base_dir
      * @return Application
+     * @date 2020/7/6 14:24
+     * @author ronghongyuan
      */
     public static function getInstance($base_dir = '')
     {
@@ -55,6 +72,10 @@ class Application
         return self::$instance;
     }
 
+    /**
+     * @date 2020/7/6 14:24
+     * @author ronghongyuan
+     */
     public function dispatch()
     {
         if (!$this->dispatch) {
@@ -84,7 +105,11 @@ class Application
         $controller = ucwords($controller);
         $class = '\\App\\Controller\\' . $controller;
         if (!method_exists($class, $action)) {
-            throw_except($class . '::' . $action . ' is not exists');
+            try {
+                throw_except($class . '::' . $action . ' is not exists');
+            } catch (\Exception $e) {
+                echo $e->getMessage();
+            }
         }
         $obj = new $class($controller, $action);
         $controller_config = self::$config['controller'];
