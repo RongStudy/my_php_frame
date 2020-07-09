@@ -83,10 +83,11 @@ function throw_except(string $info, int $code = 0)
 {
     if (IS_TEST) {
         try {
-            throw new \Exception($info, 0);
+            throw new \Exception($info, $code);
         } catch (Exception $e) {
             echo $e->getMessage();
         }
+        exit;
     } else {
         exit('Whoops, 发生了错误 !!!');
     }

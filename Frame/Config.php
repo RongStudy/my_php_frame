@@ -43,7 +43,7 @@ class Config implements \ArrayAccess
      */
     public function offsetSet($key, $value)
     {
-        throw_except("Can\'t write config file.");
+        exit("Can\'t write config file.");
     }
 
     /**

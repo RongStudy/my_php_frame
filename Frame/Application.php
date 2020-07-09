@@ -42,7 +42,7 @@ class Application
      */
     private function loader()
     {
-        is_file($this->base_dir . '/App/common.php') ? include_once $this->base_dir . '/App/common.php' : '';
+        is_file($this->base_dir . '/App/common.php') ? include_once($this->base_dir . '/App/common.php') : '';
     }
 
     /**
@@ -51,7 +51,7 @@ class Application
      */
     private function logWhoops()
     {
-        if (IS_TEST) {
+        if (!IS_TEST && class_exists('\Whoops\Run')) {
             $whoops = new \Whoops\Run;
             $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
             $whoops->register();
@@ -79,19 +79,20 @@ class Application
     public function dispatch()
     {
         if (!$this->dispatch) {
-            exit('can\'t');
+            exit('You can\'t use this function!');
         }
+
         $this->dispatch = false;
         $uri = trim($_SERVER['REQUEST_URI'], '/');
         $uri_arr = explode('/', $uri);
         if ($uri === '' || $uri[0] === '?' || $uri === '/') {
             $controller = ucwords(trim(self::$config['config']['default_controller']));
             $default_action = self::$config['config']['default_action'];
-            $action = strtolower($default_action[0]) . substr($default_action, 1, strlen($default_action));
+            $action = strtolower($default_action[0]) . substr($default_action, 1);
         } elseif (count($uri_arr) == 1) {
             $controller = ucwords($uri_arr[0]);
             $default_action = self::$config['config']['default_action'];
-            $action = strtolower($default_action[0]) . substr($default_action, 1, strlen($default_action));
+            $action = strtolower($default_action[0]) . substr($default_action, 1);
         } else {
             $controller = $uri_arr[0];
             if (strpos($uri_arr[1], '?') !== false) {
@@ -104,13 +105,15 @@ class Application
         $controller_low = strtolower($controller);
         $controller = ucwords($controller);
         $class = '\\App\\Controller\\' . $controller;
-        if (!method_exists($class, $action)) {
-            try {
-                throw_except($class . '::' . $action . ' is not exists');
-            } catch (\Exception $e) {
-                echo $e->getMessage();
-            }
+
+        if (!class_exists($class)) {
+            exit($class . ' class is not exist!');
         }
+
+        if (!method_exists($class, $action)) {
+            exit($class . '::' . $action . ' action is not exist!');
+        }
+
         $obj = new $class($controller, $action);
         $controller_config = self::$config['controller'];
         $decorators = array(); # 装饰器

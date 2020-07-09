@@ -9,5 +9,8 @@
             "Frame\\" :"Frame",
             "App\\" :"App"
         }
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^5.1"
     }
 }
